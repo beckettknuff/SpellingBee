@@ -44,13 +44,47 @@ public class SpellingBee {
     //  Store them all in the ArrayList words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void generate() {
-        // YOUR CODE HERE — Call your recursive method!
+        // Calling our recursive method to process all combinations of the given string
+        createPermutations("", letters); // Empty String similar to reversed
+    }
+
+    private void createPermutations(String origin, String remainingLetters) {
+        // If the set at the moment is not empty add it to the list of "words"
+        if (!origin.isEmpty()) {
+           words.add(origin);
+        }
+        // Recurse all remaining letters
+        for (int i = 0; i < remainingLetters.length(); i++) {
+            String nextSet = origin + remainingLetters.charAt(i);
+            String remaining = remainingLetters.substring(0, i) + remainingLetters.substring(i + 1);
+            createPermutations(nextSet, remaining);
+        }
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
-        // YOUR CODE HERE
+        // Call the recursive sort method on the ArrayList
+        mergeSort(0);
+    }
+
+    // Merge sort method
+    private ArrayList<String> mergeSort(ArrayList<String> list) {
+        // If list only has one element or is empty, it is sorted
+        if (list.size() <= 1) {
+            return list;
+        }
+        // Split the Array in half
+        int center = list.size() / 2;
+        ArrayList<String> left = new ArrayList<>(list.subList(0, center));
+        ArrayList<String> right = new ArrayList<>(list.subList(center, list.size()));
+        // Sort each side individually first
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        // Once sorted combined the two sides and return the sorted list
+        return
+
     }
 
     // Removes duplicates from the sorted list.
