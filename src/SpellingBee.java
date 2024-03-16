@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static java.io.ObjectInputFilter.merge;
-
 /**
  * Spelling Bee
  *
@@ -129,8 +127,35 @@ public class SpellingBee {
     // TODO: For each word in words, use binary search to see if it is in the dictionary.
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
-        // YOUR CODE HERE
+        // Check if the words compared in the dictionary are real, if not remove from array list
+        ArrayList<String> realWords = new ArrayList<>();
+        for(String word : words) {
+            if (binarySearch(word)) {
+                realWords.add(word);
+            }
+        }
+        words = realWords; // This will update the array with each newly found word that appears in the dictionary
+
+        }
+
+    // Method to search using high and low recursion to search dictionary
+    private boolean binarySearch(String target) {
+    int low = 0;
+    int high = SpellingBee.DICTIONARY.length - 1;
+    // Similar to quicksort in tracking the ends of the array and providing a pivot almost
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        int comparison = SpellingBee.DICTIONARY[mid].compareTo(target);
+        if (comparison == 0) {
+            return true; // Word is real
+        } else if (comparison < 0) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
     }
+    return false; // null existance
+}
 
     // Prints all valid words to wordList.txt
     public void printWords() throws IOException {
