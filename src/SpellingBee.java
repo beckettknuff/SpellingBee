@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static java.io.ObjectInputFilter.merge;
+
 /**
  * Spelling Bee
  *
@@ -49,7 +51,7 @@ public class SpellingBee {
     }
 
     private void createPermutations(String origin, String remainingLetters) {
-        // If the set at the moment is not empty add it to the list of "words"
+        // If the given set at the moment is not empty add it to the list of "words"
         if (!origin.isEmpty()) {
            words.add(origin);
         }
@@ -65,7 +67,7 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // Call the recursive sort method on the ArrayList
-        mergeSort(0);
+        words = mergeSort(words);
     }
 
     // Merge sort method
@@ -74,18 +76,43 @@ public class SpellingBee {
         if (list.size() <= 1) {
             return list;
         }
-        // Split the Array in half
-        int center = list.size() / 2;
-        ArrayList<String> left = new ArrayList<>(list.subList(0, center));
-        ArrayList<String> right = new ArrayList<>(list.subList(center, list.size()));
+        // Split the Array into two halfs
+        ArrayList<String> left = new ArrayList<>(list.subList(0, list.size() /2));
+        ArrayList<String> right = new ArrayList<>(list.subList(list.size() /2, list.size()));
         // Sort each side individually first
         left = mergeSort(left);
         right = mergeSort(right);
 
         // Once sorted combined the two sides and return the sorted list
-        return
-
+        return merge(left, right);
     }
+    // Method to merge two sorted lists into one
+    private ArrayList<String> merge(ArrayList<String> left, ArrayList<String> right) {
+        ArrayList<String> merged = new ArrayList<>();
+        int leftIndex = 0, rightIndex = 0;
+
+        // Identify and choose the shortest elements
+        while (leftIndex < left.size() && rightIndex < right.size()) {
+            if (left.get(leftIndex).compareTo(right.get(rightIndex)) < 0) {
+                merged.add(left.get(leftIndex++));
+            } else {
+                merged.add(right.get(rightIndex++));
+            }
+        }
+
+        // Find all remaining elements in each list and add to mergesort
+        // First the left
+        while (leftIndex < left.size()) {
+            merged.add(left.get(leftIndex++));
+        }
+        // right side
+        while (rightIndex < right.size()) {
+            merged.add(right.get(rightIndex++));
+        }
+
+        return merged;
+    }
+
 
     // Removes duplicates from the sorted list.
     public void removeDuplicates() {
